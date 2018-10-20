@@ -8,7 +8,7 @@ setup(
     author_email="nickdelnano@gmail.com",
     url='',
     install_requires=[
-        'spotipy_ndelnano'
+        'ndelnano-spotipy'
     ],
     license='LICENSE.txt',
     packages=['spotify, db']

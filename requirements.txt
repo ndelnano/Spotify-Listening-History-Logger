@@ -1,1 +1,4 @@
-spotipy-ndelnano
+flask
+mysqlclient
+python-dotenv
+ndelnano-spotipy
