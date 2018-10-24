@@ -18,8 +18,10 @@ def get_spotify_app_creds():
 
 def process_playlist(parameters):
     tracks = db.db.filter_to_playlist(parameters)
-    if parameters['saved'] == "0" or parameters['saved'] == "1":
-        tracks = check_tracks_saved(parameters['username'], tracks, saved)
+    saved = parameters['saved']
+    username = parameters['username']
+    if saved == 0 or saved == 1:
+        tracks = check_tracks_saved(username, tracks, saved)
 
     return ','.join(tracks)
 
@@ -34,7 +36,7 @@ def check_tracks_saved(username, track_ids, saved):
     '''
     credentials = SpotifyClientCredentials(
         username, 
-        db_creds=db.get_db_creds(),
+        db_creds=db.db.get_db_creds(),
         spotify_app_creds=get_spotify_app_creds()
     )
     spotify = spotipy.Spotify(client_credentials_manager=credentials)
@@ -44,9 +46,9 @@ def check_tracks_saved(username, track_ids, saved):
     assert (len(list_of_bools_in_order_of_track_ids) == len(track_ids))
 
     value = None
-    if saved == "1":
+    if saved == 1:
         value = True
-    elif saved == "0":
+    elif saved == 0:
         value = False
 
     return filter_lists_based_on_value(value, track_ids, list_of_bools_in_order_of_track_ids)
