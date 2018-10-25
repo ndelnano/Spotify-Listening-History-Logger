@@ -8,7 +8,10 @@ setup(
     author_email="nickdelnano@gmail.com",
     url='',
     install_requires=[
-        'ndelnano-spotipy'
+        'flask',
+        'mysqlclient',
+        'python-dotenv',
+        'ndelnano-spotipy',
     ],
     license='LICENSE.txt',
     packages=['spotify, db']
