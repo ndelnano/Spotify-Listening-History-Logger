@@ -1,4 +1,5 @@
 .env
 venv
 tags
-*.pyc
+*.py[co]
+.tox
