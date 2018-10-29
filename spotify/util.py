@@ -19,9 +19,15 @@ def get_spotify_app_creds():
 def process_playlist(parameters):
     tracks = db.db.filter_to_playlist(parameters)
     saved = parameters['saved']
-    username = parameters['username']
+
+    print('Got this many tracks back from the query')
+    print(len(tracks))
+
+    # If the saved parameter was set, filter for it.
     if saved == 0 or saved == 1:
-        tracks = check_tracks_saved(username, tracks, saved)
+        tracks = check_tracks_saved(parameters['username'], tracks, saved)
+    print('Sending back this many tracks from /process_filter')
+    print(len(tracks))
 
     return ','.join(tracks)
 
@@ -44,6 +50,7 @@ def check_tracks_saved(username, track_ids, saved):
     list_of_bools_in_order_of_track_ids = spotify.current_user_saved_tracks_contains(track_ids)
 
     assert (len(list_of_bools_in_order_of_track_ids) == len(track_ids))
+    print(list_of_bools_in_order_of_track_ids)
 
     value = None
     if saved == 1:
@@ -54,11 +61,30 @@ def check_tracks_saved(username, track_ids, saved):
     return filter_lists_based_on_value(value, track_ids, list_of_bools_in_order_of_track_ids)
 
 # TODO
-def create_playlist(username, track_ids):
-    # check if playlist name already exists for user, create if not
-    # add tracks to playlist -- settings for public/private and collaborative?
-    # limit is 100 per request, but watch out for url max length. client lib uses GET, so watch out for url length
-    pass
+def create_playlist(username, track_ids, playlist_name, description):
+    credentials = SpotifyClientCredentials(
+        username, 
+        db_creds=db.db.get_db_creds(),
+        spotify_app_creds=get_spotify_app_creds()
+    )
+    spotify = spotipy.Spotify(client_credentials_manager=credentials)
+
+    spotify_user_data = spotify.me()
+    spotify_user_id = spotify_user_data['id']
+
+    playlist_is_public = True
+
+    playlist = spotify.user_playlist_create(spotify_user_id, playlist_name, playlist_is_public, description)
+    if playlist is None:
+        raise Exception('Playlist not created successfully')
+
+    playlist_id = playlist['id']
+    val = spotify.user_playlist_add_tracks(spotify_user_id, playlist_id, track_ids)
+
+    if val is None:
+        raise Exception('Error adding tracks to playlist')
+
+    return 'Success'
 
 def filter_lists_based_on_value(value, tracks, bools):
     assert(len(tracks) == len(bools))
