@@ -13,7 +13,6 @@ def process_filter():
     Processes a filter according to the playlist-parser spec and returns a list of
     spotify `song_id` that satisfy the filter.
     '''
-    print(request.args)
     filter_args = dict()
     filter_args['username'] = request.args.get('username')
     filter_args['time_begin'] = request.args.get('time_begin')
@@ -30,7 +29,7 @@ def process_filter():
 
 '''
 Query params: username, playlist_name
-Post body is csv of track_ids
+Post body: csv of track_ids
 
 # possible TODO: parameterize for public/private and collaborative
 '''
