@@ -14,5 +14,5 @@ setup(
         'ndelnano-spotipy',
     ],
     license='LICENSE.txt',
-    packages=['spotify, db']
+    packages=['spotify', 'db']
 )
