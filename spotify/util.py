@@ -94,3 +94,16 @@ def filter_lists_based_on_value(value, tracks, bools):
         if bools[x] == value:
             rv.append(tracks[x])
     return rv
+
+if __name__ == "__main__":
+    username='nickdelnano@gmail.com'
+    credentials = SpotifyClientCredentials(
+        username, 
+        db_creds=db.db.get_db_creds(),
+        spotify_app_creds=get_spotify_app_creds()
+    )
+    spotify = spotipy.Spotify(client_credentials_manager=credentials)
+    track_ids=['3HYVFFbl9Ci8amG99czVQy', '3aA7kPeiyHBTbd8DAPcPV9']
+
+    print(spotify.current_user_saved_tracks_contains(track_ids))
+
