@@ -6,3 +6,13 @@ This repo holds various functionalities for supporting the [playlist-parser](htt
   * /process_filter TODO add parameters -- returns tracks that match the filter
   * /make_playlist TODO add parameters -- create playlist with supplied tracks
 
+
+Current setup instructions: (will be useful when completing puppeted setup)
+git clone __this_repo__
+sudo apt-get install tox python3.6-dev libmysqlclient-dev
+tox -e flask
+
+sudo apt install mysql-server
+sudo mysql_secure_installation
+
+
