@@ -22,11 +22,6 @@ CREATE TABLE users (
   apple_music_time_of_last_track_played INT
 );
 
--- ADD TEST USER
-/*
-insert into users (username, email, spotify_auth_token, spotify_refresh_token, is_spotify_user, spotify_time_of_last_track_played) VALUES ('nick', 'nick@gmail.com', 'BQAnLucMC3aK4sDBbkeMV5_O8lJvTpFEh9Rk1SulAqsFOhMxKLQJqIk5XWsgMBOReFpWjhHijXJYQrESdnFFpQCql0BIOEn7lj81zqpv9N5LP8EOJaRgS4rC28HOWGMQWxvmQF94FGqaaD1mHPZkkJNJ8W-7YjIl_fnLpjOAnfeyIHnYsqjUGPLkKGs2yxUJhIZ2I-Eu12XuYQk', 'AQBrFb2y17YqOgu5YSMpIH4q-UkgdTY7Ap15RKTvV08YA1SqOdPMN8p-Ui560SETgjR5N5m3-uhBFQy7WjXAI6n6jUhQyqlYq9k6bMYpt-1l-NI1TfDPSXYJCDNRBuxuKic', '1', '-1');
-*/
-
 CREATE TABLE artists (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100),
