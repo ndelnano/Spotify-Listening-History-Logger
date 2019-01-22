@@ -16,6 +16,15 @@ def get_spotify_app_creds():
 
     return creds
 
+def get_spotify_client_for_username(username):
+    credentials = SpotifyClientCredentials(
+        username, 
+        db_creds=db.db.get_db_creds(),
+        spotify_app_creds=spotify.util.get_spotify_app_creds()
+    )
+
+    return spotipy.Spotify(client_credentials_manager=credentials)
+
 def process_playlist(parameters):
     tracks = db.db.filter_to_playlist(parameters)
     saved = parameters['saved']
@@ -40,12 +49,7 @@ def check_tracks_saved(username, track_ids, saved):
     saved     - string of 0 or 1. If 0, return tracks that are not in a user's library. If 1, return
             tracks that are in a user's library.
     '''
-    credentials = SpotifyClientCredentials(
-        username, 
-        db_creds=db.db.get_db_creds(),
-        spotify_app_creds=get_spotify_app_creds()
-    )
-    spotify = spotipy.Spotify(client_credentials_manager=credentials)
+    spotify = get_spotify_client_for_username(username)
 
     list_of_bools_in_order_of_track_ids = spotify.current_user_saved_tracks_contains(track_ids)
 
@@ -62,12 +66,7 @@ def check_tracks_saved(username, track_ids, saved):
 
 # TODO
 def create_playlist(username, track_ids, playlist_name, description):
-    credentials = SpotifyClientCredentials(
-        username, 
-        db_creds=db.db.get_db_creds(),
-        spotify_app_creds=get_spotify_app_creds()
-    )
-    spotify = spotipy.Spotify(client_credentials_manager=credentials)
+    spotify = get_spotify_client_for_username(username)
 
     spotify_user_data = spotify.me()
     spotify_user_id = spotify_user_data['id']
@@ -97,13 +96,9 @@ def filter_lists_based_on_value(value, tracks, bools):
 
 if __name__ == "__main__":
     username='nickdelnano@gmail.com'
-    credentials = SpotifyClientCredentials(
-        username, 
-        db_creds=db.db.get_db_creds(),
-        spotify_app_creds=get_spotify_app_creds()
-    )
-    spotify = spotipy.Spotify(client_credentials_manager=credentials)
-    track_ids=['3HYVFFbl9Ci8amG99czVQy', '3aA7kPeiyHBTbd8DAPcPV9']
+    spotify = get_spotify_client_for_username(username)
+
+    track_ids= ['3HYVFFbl9Ci8amG99czVQy', '3aA7kPeiyHBTbd8DAPcPV9']
 
     print(spotify.current_user_saved_tracks_contains(track_ids))
 

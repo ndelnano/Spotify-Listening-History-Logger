@@ -25,20 +25,37 @@ def conn():
         db=creds['DB_NAME'],
     )
 
-def get_user_id_for_username(username):
+def get_time_of_last_track_play(username):
+    col_name = 'spotify_time_of_last_track_played'
+
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute("""
-        SELECT id from users where username = %s
-    """, (username,))
+        SELECT %s from users where username = %s
+    """, (col_name, username,))
+    result = cur.fetchone()
+    if not result:
+        print('finding time of last track play, did not find user in db, exiting')
+        sys.exit(1)
+    else:
+        return result[col_name]
+
+    return user_id 
+
+def get_user_id_for_username(username):
+    col_name = 'id'
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute("""
+        SELECT %s from users where username = %s
+    """, (col_name, username,))
     result = cur.fetchone()
     if not result:
         print('did not find user in db, exiting')
         sys.exit(1)
     else:
-        user_id = result['id']
-
-    return user_id 
+        return result[col_name]
 
 # TODO: use release_start, release_end
 def filter_to_playlist(filter_args):
