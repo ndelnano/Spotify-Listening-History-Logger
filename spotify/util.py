@@ -20,7 +20,7 @@ def get_spotify_client_for_username(username):
     credentials = SpotifyClientCredentials(
         username, 
         db_creds=db.db.get_db_creds(),
-        spotify_app_creds=spotify.util.get_spotify_app_creds()
+        spotify_app_creds=get_spotify_app_creds()
     )
 
     return spotipy.Spotify(client_credentials_manager=credentials)

@@ -8,7 +8,7 @@ use playlists;
  */
 CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(30),
+  username VARCHAR(30), 
   password VARCHAR(100),
   email VARCHAR(100),
   registration_cookie VARCHAR(16),
@@ -19,7 +19,8 @@ CREATE TABLE users (
   spotify_refresh_token VARCHAR(300),
   expires_at int(11),
   spotify_time_of_last_track_played INT,
-  apple_music_time_of_last_track_played INT
+  apple_music_time_of_last_track_played INT,
+  UNIQUE KEY(username)
 );
 
 CREATE TABLE artists (
@@ -27,7 +28,8 @@ CREATE TABLE artists (
   name VARCHAR(100),
   spotify_id VARCHAR(100),
   spotify_uri VARCHAR(100),
-  genre_set INT
+  genre_set INT,
+  UNIQUE KEY(spotify_uri)
 );
 
 CREATE TABLE tracks (
@@ -47,8 +49,10 @@ CREATE TABLE tracks (
   liveness FLOAT(8,5),
   valence FLOAT(8,5),
   tempo FLOAT(8,5),
-  time_signature INT
+  time_signature INT,
+  UNIQUE KEY(spotify_uri)
 );
+
 
 CREATE TABLE songs_played (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

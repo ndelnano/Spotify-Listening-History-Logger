@@ -30,27 +30,57 @@ def get_time_of_last_track_play(username):
 
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
-    cur.execute("""
-        SELECT %s from users where username = %s
-    """, (col_name, username,))
+    query = f'SELECT {col_name} from users where username="{username}"'
+    cur.execute(query)
     result = cur.fetchone()
+    conn.close()
+
     if not result:
         print('finding time of last track play, did not find user in db, exiting')
         sys.exit(1)
     else:
         return result[col_name]
 
-    return user_id 
-
-def get_user_id_for_username(username):
-    col_name = 'id'
+def update_time_of_last_track_play(username, seconds_since_epoch):
+    col_name = 'spotify_time_of_last_track_played'
+    query = f'UPDATE users SET {col_name}="{seoconds_since_epoch}" where username="{username}"'
 
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
-    cur.execute("""
-        SELECT %s from users where username = %s
-    """, (col_name, username,))
+    cur.execute(query)
+    con.commit()
+    conn.close()
+
+def save_track_if_not_exists(track):
+    '''
+    track - dict, keys: name, uri, id, duration_ms
+    '''
+    query = f'''
+        INSERT IGNORE INTO tracks 
+            (name, soptify_uri, spotify_id, duration_ms)
+        VALUES
+                ({track['name']}, {track['uri']}, {track['id']}, {track['duration_ms']})
+    '''
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+def save_played_song(username, played_track):
+    return 0
+
+def get_user_id_for_username(username):
+    col_name = 'id'
+    query = f'SELECT {col_name} from users where username="{username}"'
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
     result = cur.fetchone()
+    conn.close()
+
     if not result:
         print('did not find user in db, exiting')
         sys.exit(1)
@@ -100,6 +130,7 @@ def filter_to_playlist(filter_args):
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query)
     results = cur.fetchall()
+    conn.close()
 
     return_value = []
     for x in results:

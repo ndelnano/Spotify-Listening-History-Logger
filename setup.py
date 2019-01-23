@@ -12,6 +12,7 @@ setup(
         'mysqlclient',
         'python-dotenv',
         'ndelnano-spotipy',
+        'python-dateutil',
     ],
     license='LICENSE.txt',
     packages=['spotify', 'db']
