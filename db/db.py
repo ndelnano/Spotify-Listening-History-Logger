@@ -33,7 +33,7 @@ def get_time_of_last_track_play(username):
     query = f'SELECT {col_name} from users where username="{username}"'
     cur.execute(query)
     result = cur.fetchone()
-    conn.close()
+    con.close()
 
     if not result:
         print('finding time of last track play, did not find user in db, exiting')
@@ -43,13 +43,13 @@ def get_time_of_last_track_play(username):
 
 def update_time_of_last_track_play(username, seconds_since_epoch):
     col_name = 'spotify_time_of_last_track_played'
-    query = f'UPDATE users SET {col_name}="{seoconds_since_epoch}" where username="{username}"'
+    query = f'UPDATE users SET {col_name}="{seconds_since_epoch}" where username="{username}"'
 
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query)
     con.commit()
-    conn.close()
+    con.close()
 
 def save_track_if_not_exists(track):
     '''
@@ -57,19 +57,69 @@ def save_track_if_not_exists(track):
     '''
     query = f'''
         INSERT IGNORE INTO tracks 
-            (name, soptify_uri, spotify_id, duration_ms)
+            (name, spotify_uri, spotify_id, duration_ms)
         VALUES
-                ({track['name']}, {track['uri']}, {track['id']}, {track['duration_ms']})
+                ("{track['name']}", "{track['uri']}", "{track['id']}", "{track['duration_ms']}")
     '''
 
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query)
-    conn.commit()
-    conn.close()
+    con.commit()
+    con.close()
 
-def save_played_song(username, played_track):
-    return 0
+def get_all_users():
+    query = f'''
+    SELECT username from users
+    '''
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    results = cur.fetchall()
+    con.close()
+
+    return_value = []
+    for x in results:
+        return_value.append(x['username'])
+
+    return return_value
+
+def save_played_song(username, track_uri, played_at):
+    ''' Save played track into songs_played table
+    Convert track_uri to the pk auto inc track_id from mysql
+    '''
+    user_id = get_user_id_for_username(username)
+    track_id = get_track_id_for_track_uri(track_uri)
+
+    query = f'''
+        INSERT INTO songs_played
+            (track_id, user_id, played_at)
+        VALUES
+                ("{track_id}", "{user_id}", "{played_at}")
+    '''
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    con.commit()
+    con.close()
+
+def get_track_id_for_track_uri(track_uri):
+    col_name = 'id'
+    query = f'SELECT {col_name} from tracks where spotify_uri ="{track_uri}"'
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    result = cur.fetchone()
+    con.close()
+
+    if not result:
+        print(f'did not find track by track_uri {track_uri} in db, exiting')
+        sys.exit(1)
+    else:
+        return result[col_name]
 
 def get_user_id_for_username(username):
     col_name = 'id'
@@ -79,7 +129,7 @@ def get_user_id_for_username(username):
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query)
     result = cur.fetchone()
-    conn.close()
+    con.close()
 
     if not result:
         print('did not find user in db, exiting')
@@ -130,7 +180,7 @@ def filter_to_playlist(filter_args):
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query)
     results = cur.fetchall()
-    conn.close()
+    con.close()
 
     return_value = []
     for x in results:

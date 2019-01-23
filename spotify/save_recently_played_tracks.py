@@ -2,7 +2,7 @@ import calendar
 import time
 
 from spotify.util import get_spotify_client_for_username
-from db.db import get_time_of_last_track_play, save_track_if_not_exists, save_played_song, update_time_of_last_track_play
+from db.db import get_all_users, get_time_of_last_track_play, save_track_if_not_exists, save_played_song, update_time_of_last_track_play
 
 def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp):
     '''
@@ -16,7 +16,7 @@ def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp
     '''
 
     # TODO write test regarding removing .###Z from end of timestring
-    return calendar.timegm((time.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")))
+    return calendar.timegm((time.strptime(timestamp.rsplit('.')[0], "%Y-%m-%dT%H:%M:%S")))
     
 def parse_recently_played_api_response(response):
     '''
@@ -50,8 +50,8 @@ def parse_recently_played_api_response(response):
 def find_latest_timestamp(played_tracks):
     latest_timestamp = -1
     for x in played_tracks:
-        if played_tracks['played_at'] > x:
-            latest_timestamp = played_tracks['played_at']
+        if x['played_at'] > latest_timestamp:
+            latest_timestamp = x['played_at']
 
     return latest_timestamp
 
@@ -74,13 +74,13 @@ def save_recently_played_tracks(username):
 
     time_of_last_track_play = get_time_of_last_track_play(username)
 
-    # Save tracks to db that are newer than `time_of_last_track_play`
+    # Save track plays that are newer than `time_of_last_track_play`
     for x in played_tracks:
-        if played_tracks['played_at'] > time_of_last_track_play:
-            save_track_if_not_exists(played_track)
-            save_played_song(username, played_track)
+        if int(x['played_at']) > int(time_of_last_track_play):
+            save_track_if_not_exists(x)
+            save_played_song(username, x['uri'], x['played_at'])
 
-    # Update time of last play
+    # Update time of last play.
     # Find the max time value ourselves. Don't rely on spotify
     # returning the tracks in the order they were played.
     latest_song_play = find_latest_timestamp(played_tracks)
@@ -88,5 +88,6 @@ def save_recently_played_tracks(username):
 
 
 if __name__ == "__main__":
-    username='nick'
-    save_recently_played_tracks(username)
+    usernames = get_all_users()
+    for user in usernames:
+        save_recently_played_tracks(user)
