@@ -18,11 +18,11 @@ sudo apt install mysql-server
 sudo mysql_secure_installation
 
 
-# Travis CI
-Environment variables
+# Environment variables
 - SPOTIFY_CLIENT_ID
 - SPOTIFY_CLIENT_SECRET
 - DB_HOST
 - DB_USER
 - DB_PASS
 - DB_NAME
+These are set in travis CI, and via a .env file in the project root dir for deployments.
