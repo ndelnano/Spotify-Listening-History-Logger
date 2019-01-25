@@ -5,16 +5,11 @@ from dotenv import load_dotenv
 import MySQLdb
 
 def get_db_creds():
-    # Ensure secrets are loaded
-    load_dotenv()
-    print('printing secrets:')
-    print(os.getenv('DB_HOST'))
-
     creds = {}
-    creds['DB_HOST'] = 'localhost'
-    creds['DB_USER'] = 'root'
-    creds['DB_PASS'] = ''
-    creds['DB_NAME'] = 'playlists'
+    creds['DB_HOST'] = os.getenv('DB_HOST')
+    creds['DB_USER'] = os.getenv('DB_USER')
+    creds['DB_PASS'] = os.getenv('DB_PASS')
+    creds['DB_NAME'] = os.getenv('DB_NAME')
 
     return creds
 
