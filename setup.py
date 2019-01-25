@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='rpp-collector',
+    name='recently-played-playlists',
     version='0.0.0',
-    description='Collect spotify listening history',
+    description='Poll Spotify listening history and log to MySQL, & HTTP API for recently-played-playlists-parser.',
     author="@ndelnano",
     author_email="nickdelnano@gmail.com",
-    url='',
+    url='github.com/ndelnano/recently-played-playlists',
     install_requires=[
         'flask',
         'mysqlclient',
