@@ -19,10 +19,10 @@ def get_db_creds():
 def conn():
     creds = get_db_creds()
     return MySQLdb.connect(
-        host=creds['DB_HOST'],
-        user=creds['DB_USER'],
-        passwd=creds['DB_PASS'],
-        db=creds['DB_NAME'],
+        host='localhost',
+        user='root',
+        passwd='',
+        db='playlists'
     )
 
 def get_time_of_last_track_play(username):
