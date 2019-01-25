@@ -69,15 +69,15 @@ def save_recently_played_tracks(username):
       Spotify does support an 'after' timestamp on the get-recently-played endpoint, however, 
       if no songs have been played since 'after', spotify returns 1 song, the most recently
       played one for the user. For this reason, do not use the 'after' parameter, and use the 
-      `spotify_time_of_last_track_played` field in the database to determine whether the song is 'new' or not.
+      `time_of_last_track_played` field in the database to determine whether the song is 'new' or not.
     '''
-    time_of_last_track_play = get_time_of_last_track_play(username)
+    time_of_last_track_played = get_time_of_last_track_play(username)
 
     played_tracks = call_recently_played_endpoint(username)
 
-    # Save track plays that are newer than `time_of_last_track_play`
+    # Save track plays that are newer than `time_of_last_track_played`
     for x in played_tracks:
-        if int(x['played_at']) > int(time_of_last_track_play):
+        if int(x['played_at']) > int(time_of_last_track_played):
             save_track_if_not_exists(x)
             save_played_song(username, x['uri'], x['played_at'])
 

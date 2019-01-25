@@ -18,9 +18,7 @@ before_install:
 # variables are encrypted in form var=value, so strip out 'var=' to get just 'value'
 - AUTH_TOKEN_VALUE=$(echo $AUTH_TOKEN | sed 's/AUTH_TOKEN=//')
 - REFRESH_TOKEN_VALUE=$(echo $REFRESH_TOKEN | sed 's/REFRESH_TOKEN=//')
-- query="use playlists; insert into users (username, email, spotify_auth_token, spotify_refresh_token,
-  is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user',
-  'test_user@test.com', '$AUTH_TOKEN_VALUE', '$REFRESH_TOKEN_VALUE', '1', '-1', '-1');"
+- query="use playlists; insert into users (username, email, spotify_auth_token, spotify_refresh_token, time_of_last_track_played, expires_at) VALUES ('test_user', 'test_user@test.com', '$AUTH_TOKEN_VALUE', '$REFRESH_TOKEN_VALUE', '-1', '-1');"
 - mysql -u root -e "$query"
 - echo $SPOTIFY_CLIENT_ID > .env
 - echo $SPOTIFY_CLIENT_SECRET > .env

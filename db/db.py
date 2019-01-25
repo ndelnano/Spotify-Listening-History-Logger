@@ -25,7 +25,7 @@ def conn():
     )
 
 def get_time_of_last_track_play(username):
-    col_name = 'spotify_time_of_last_track_played'
+    col_name = 'time_of_last_track_played'
 
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
@@ -41,7 +41,7 @@ def get_time_of_last_track_play(username):
         return result[col_name]
 
 def update_time_of_last_track_play(username, seconds_since_epoch):
-    col_name = 'spotify_time_of_last_track_played'
+    col_name = 'time_of_last_track_played'
     query = f'UPDATE users SET {col_name}="{seconds_since_epoch}" where username="{username}"'
 
     con = conn()

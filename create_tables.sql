@@ -13,13 +13,10 @@ CREATE TABLE users (
   email VARCHAR(100),
   registration_cookie VARCHAR(16),
   date_registered INT,
-  is_spotify_user INT,
-  is_apple_music_user INT,
   spotify_auth_token VARCHAR(300),
   spotify_refresh_token VARCHAR(300),
   expires_at int(11),
-  spotify_time_of_last_track_played INT,
-  apple_music_time_of_last_track_played INT,
+  time_of_last_track_played INT,
   UNIQUE KEY(username)
 );
 
