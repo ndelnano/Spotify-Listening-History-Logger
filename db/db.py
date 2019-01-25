@@ -59,12 +59,13 @@ def save_track_if_not_exists(track):
         INSERT IGNORE INTO tracks 
             (name, spotify_uri, spotify_id, duration_ms)
         VALUES
-                ("{track['name']}", "{track['uri']}", "{track['id']}", "{track['duration_ms']}")
+            (%s, %s, %s, %s)
     '''
 
+    values = (track['name'], track['uri'], track['id'], track['duration_ms'])
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
-    cur.execute(query)
+    cur.execute(query, values)
     con.commit()
     con.close()
 
@@ -96,12 +97,13 @@ def save_played_song(username, track_uri, played_at):
         INSERT INTO songs_played
             (track_id, user_id, played_at)
         VALUES
-                ("{track_id}", "{user_id}", "{played_at}")
+                (%s, %s, %s)
     '''
 
+    values = (track_id, user_id, played_at)
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
-    cur.execute(query)
+    cur.execute(query, values)
     con.commit()
     con.close()
 
