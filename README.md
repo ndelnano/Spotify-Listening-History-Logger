@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ndelnano/recently-played-playlists.svg?branch=master)](https://travis-ci.org/ndelnano/recently-played-playlists)
+
 This repo holds various functionalities for supporting the [playlist-parser](https://github.com/ndelnano/playlist-parser).
 * Utilites for saving data of a user's recently played tracks from the spotify API and inserting them into MySQL
   * Poll spotify's [get-recently-played endpoint](https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/) and save this data (intended to be run as cron.. TODO see [recently-played-playlists-puppet](https://github.com/ndelnano/recently-played-playlists-puppet).
