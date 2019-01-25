@@ -9,20 +9,23 @@ env:
   global:
   - secure: nnswvWrevd1UmoWuqAYqbUPg75b/HXvM9k5kY0CMN/1k5qAk/9Ydiok5HEXa7BEryh29fmkPUcjaTcWifFdvSXs0lrvFZ5qAWRXYbXRSlyBMpnJbBNeI/90TwstW3p5+qddj+HeaEDlQy5Ku00uuOaKqPWUF2LIRS8yw1wbh2yXmE8sCjvbKq11Pu0jPdIi4BuGmbRyZ8B9MrumGPBrJUOQ61olmCuFGrhKMwddgFO4vDkfjk694YP8/ekDzFoUySz2cmSBDJhyWJ5UDXjlbvJa3hQBdMHBwXypmqH90D9xkKyi7xNUr5euBIUkNutBY6TeHAX5of6+lZnNXk2BtfCjBlfEdOpP1k/b9OIQJD6xJctKzbMNC5pslPt0u7V8Wqs2vN9XPX7jyCMsB3NWQbvpEVFkaFCrKdM0Azs8SZA5FXAIL81jtexWQv3nVhJ0A2P/o7PBj3GoSeLRKvXPytIwcoUKm2g7JBAJGktMSmd0sF9HhSK1gTkv2zOEvy3mMumMHYL0fSPqZEe+YWcp8dTquhf3i2Cxq0eZpbfh0vaufKGg9HPrS2udRMJizfMV/VhE2UsX7lq9MyBbHzjI4rUzOuUf966iFigpHCxhtr5Z9Mu/VnqaXlinOP111I09Dbnia/NFOmSkXuo6iaCrrYu3c7DBfieWKx9Hz3xipbUE=
   - secure: U9LWxV0zz2zk33op33ZCQMC0u7rath+7812N8WL/6bIpNv77ARb/VeP8NBqDqSoBi1nwvo/WHhCUIEUpKQn4yKIw/5CFCbdTlXppQYNUjS8//IdvaL9nfRkbxGIi1TUR4yWcAYhH6bzMUQQfjZMde1Oet6FzrTpBBg3rWhFRnu9Ju6ca35Nh97WiTAvuulO935grk9PCFxOMfck3vSeflO6MUwWL65pQgVlR+mLadkjzDsIqiS2Y4a00sBT68xppn3tMIEh3ke6c8rj5hnEmEfoY5METsMiQeVU6E8n+nRsQHCAgwizBLK1Q8gRbarIEhz8wM44cDTSz0vcMuqlJGA2QtCIB2i+OqySooNgDHO7A6Hf47013HmqzZ93HoBXMGgpL1NmZwFJzsSoOd9RjXZGreTy3i+tcSelQXLkFHwzfuaXKr8cnohamsxVpE9VRkize30pVN3OkxnX22FdJoSoy1kH3TI/VJ8Lzy8KSqmPFmxgYZpapIp+rGg2UcE08uLsu09YyCunGK0/Vh9n/U61AWz2dp74tlXu5ekx+ypxpr9rax3t/uFNLNobxXYiecs3M8MCV5zYnOFyPkCwBPjUPLGZ1k0J2MlYfhvGgrEhVEuvsj1fUkwIpjl43wTQhnse/C5Myd0amsF2g2gwreJ/lmEv55WdpnU8JOKvSxdA=
-
+  - secure: xq+8uqr62MjbrgtUbPdCMNIhC1uYZcTfME+7bH/6tgfKVSVJsPrcCSIi6L09SYY2w2pg0aKJwYv6Dch3Q535MGr52EtQ7UwTjiH0r9WLQAuFat5RGrsq6dmexalsUAwhsymYlW2yGwIoOyQaCWswQIot0/z8lhscjZhaGFYxOvlkzQ/2+m/H5Cgzd8F73zcW2je7Ttp9cjMu5E7+WssbPtNoc3DTDWbB/fJjXmmFBKRj08LjWxaD1Im/7f/vPynO9Ap6D4WlR+JeV4XTBGOSIiNJbNdtNSk47EFVpT7i8upIcTqLt+6S3JK13weiU0RmSfBSQ2LpWOQxtfvgzwnKy8WaQDORpMqmw22Nue3dh9ZzhnmoCAHGuHaMREwalQmB4xamr1eht7lM51WK8HShuDBOcSeSYvXKKsSbfzehwonZAYExLVgATwSE9HFHrmyZeCug/+hvEhENRf6QoI+LEICTHw6obRR172Xh6MrhHvVYoNVqtEwkyZUxo0PweF/c3fCy1+VRK0lfpVJVqBgLRDAAgP8Dk9Tb8ErW8+UdMqa4bxwzozXb2Zot+vIvWcoEFKAcwJayAN8/r9X9LzWq63iYwh3zmJCfBzrWxuBGrjImRv60owo0rC7+GAY+Mxf1lS7eDFrDIbpZL4nm+35sj7Dly9Bz+uTcSR873EE9NTU=
+  - secure: riMov07lyrd3SbizGtmaf9RF6wWQviaitrK5VGyDQoZZf3IhGTvyv+rVUfy/cshHWWFPeYj5dyPBVdSh2/F3GBL5hr0PpcGP3KwEUoi/r5ZsMK/EkWD3B073aeTOSPBBgf9Lw3/kTFkxZgikrhKsfORZoWLld1xDZmjxUgA1XgTDI0YYBLWm3vRESMtHnSHzredeg1Mzbggycrlqh7fmpgduaNb09bwoAaK9mdVkQYzGWPZB5QbypDkEXuu1ucGe+5RyIwCEjPhR+QVhSwhq1njbCsoG73R7usmJvvlrJMiQM6kqt8Jc5Np5SwZ5MnfaoLocvY+TlyKo/wrtXeYCLenq+0lX7fPuNn2tEm026xeTTknyDD3I2spj4Jv6kBDTunO3I4Wa2Uzh9/JwFOWzUrBg/b0eMphUD0wyQaKLSmyrqqps2V5Bu1Kpxszgc185m1IO6G53rxCL1uzQRtTd4OkzKNYun144BfWHPscR7Ai5vuWtc0rsGmrsOZQZ0iZBg0STKHnoUMP7sK5DJXhlUuCpqT8yLICBRHQlFr8jusuHKgNzYJMdR6D0ziGyHATiIgP3S2yqCEz0UI2OUA6UUzls8fQ9bNfiaHzxJ34Ya+Ya0ea0pz0CT5oQB5my2pnxBGkTDvO2zz9766NeMLqThWzmE9nlO5LW/1WL/8f/ooY=
 before_install:
 # Create mysql tables
 - mysql -u root < create_tables.sql
 # Set up testing user
 # This is done here to utilize travis ci's encryption of secrets
-- mysql -u root -e "insert into users (username, email, spotify_auth_token, spotify_refresh_token, is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user', 'test_user@test.com', '$AUTH_TOKEN', '$REFRESH_TOKEN', '1', '-1', '-1');
-"
+- mysql -u root -e "insert into users (username, email, spotify_auth_token, spotify_refresh_token,
+  is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user',
+  'test_user@test.com', '$AUTH_TOKEN', '$REFRESH_TOKEN', '1', '-1', '-1');"
 - echo 'DB_HOST=127.0.0.1' > .env
 - echo 'DB_USER=root' > .env
 - echo 'DB_PASS=""' > .env
 - echo 'DB_NAME=playlists' > .env
 - echo $SPOTIFY_CLIENT_ID > .env
 - echo $SPOTIFY_CLIENT_SECRET > .env
+- echo $AUTH_TOKEN
 install:
 - pip install -r requirements.txt
 script: pytest
