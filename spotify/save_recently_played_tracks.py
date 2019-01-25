@@ -15,8 +15,15 @@ def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp
       So, cut off the millis and timestamp, and convert to seconds since epoch.
     '''
 
-    # TODO write test regarding removing .###Z from end of timestring
     return calendar.timegm((time.strptime(timestamp.rsplit('.')[0], "%Y-%m-%dT%H:%M:%S")))
+
+def find_latest_timestamp(played_tracks):
+    latest_timestamp = -1
+    for x in played_tracks:
+        if x['played_at'] > latest_timestamp:
+            latest_timestamp = x['played_at']
+
+    return latest_timestamp
     
 def parse_recently_played_api_response(response):
     '''
@@ -47,13 +54,10 @@ def parse_recently_played_api_response(response):
 
     return list_of_tracks
 
-def find_latest_timestamp(played_tracks):
-    latest_timestamp = -1
-    for x in played_tracks:
-        if x['played_at'] > latest_timestamp:
-            latest_timestamp = x['played_at']
-
-    return latest_timestamp
+def call_recently_played_endpoint(username):
+    spotify = get_spotify_client_for_username(username)
+    response = spotify.current_user_recently_played()
+    return parse_recently_played_api_response(response)
 
 def save_recently_played_tracks(username):
     '''
@@ -68,11 +72,9 @@ def save_recently_played_tracks(username):
       played one for the user. For this reason, do not use the 'after' parameter, and use the 
       `spotify_time_of_last_track_played` field in the database to determine whether the song is 'new' or not.
     '''
-    spotify = get_spotify_client_for_username(username)
-    response = spotify.current_user_recently_played()
-    played_tracks = parse_recently_played_api_response(response)
-
     time_of_last_track_play = get_time_of_last_track_play(username)
+
+    played_tracks = call_recently_played_endpoint(username)
 
     # Save track plays that are newer than `time_of_last_track_play`
     for x in played_tracks:
@@ -85,6 +87,8 @@ def save_recently_played_tracks(username):
     # returning the tracks in the order they were played.
     latest_song_play = find_latest_timestamp(played_tracks)
     update_time_of_last_track_play(username, latest_song_play)
+
+    return 0
 
 
 if __name__ == "__main__":
