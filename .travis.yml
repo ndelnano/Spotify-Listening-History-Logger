@@ -23,13 +23,15 @@ before_install:
   is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user',
   'test_user@test.com', '$AUTH_TOKEN_VALUE', '$REFRESH_TOKEN_VALUE', '1', '-1', '-1');"
 - mysql -u root -e "$query"
-- echo 'DB_HOST=127.0.0.1' > .env
-- echo 'DB_USER=root' > .env
-- echo 'DB_PASS=' > .env
-- echo 'DB_NAME=playlists' > .env
+# DB_* variables are not secret, but travis seems to not allow modifying a file
+# that contains secrets. I had tried `echo 'DB_HOST=127.0.0.1' > .env` but nothing happened.
+# DB_HOST=127.0.0.1, DB_USER=root, DB_PASS='', DB_NAME=playlists
+- echo $DB_HOST > .env
+- echo $DB_USER > .env
+- echo $DB_PASS > .env
+- echo $DB_NAME > .env
 - echo $SPOTIFY_CLIENT_ID > .env
 - echo $SPOTIFY_CLIENT_SECRET > .env
-- cat .env
 install:
 - pip install -r requirements.txt
 script: pytest -v -s
