@@ -11,8 +11,12 @@ env:
   - secure: U9LWxV0zz2zk33op33ZCQMC0u7rath+7812N8WL/6bIpNv77ARb/VeP8NBqDqSoBi1nwvo/WHhCUIEUpKQn4yKIw/5CFCbdTlXppQYNUjS8//IdvaL9nfRkbxGIi1TUR4yWcAYhH6bzMUQQfjZMde1Oet6FzrTpBBg3rWhFRnu9Ju6ca35Nh97WiTAvuulO935grk9PCFxOMfck3vSeflO6MUwWL65pQgVlR+mLadkjzDsIqiS2Y4a00sBT68xppn3tMIEh3ke6c8rj5hnEmEfoY5METsMiQeVU6E8n+nRsQHCAgwizBLK1Q8gRbarIEhz8wM44cDTSz0vcMuqlJGA2QtCIB2i+OqySooNgDHO7A6Hf47013HmqzZ93HoBXMGgpL1NmZwFJzsSoOd9RjXZGreTy3i+tcSelQXLkFHwzfuaXKr8cnohamsxVpE9VRkize30pVN3OkxnX22FdJoSoy1kH3TI/VJ8Lzy8KSqmPFmxgYZpapIp+rGg2UcE08uLsu09YyCunGK0/Vh9n/U61AWz2dp74tlXu5ekx+ypxpr9rax3t/uFNLNobxXYiecs3M8MCV5zYnOFyPkCwBPjUPLGZ1k0J2MlYfhvGgrEhVEuvsj1fUkwIpjl43wTQhnse/C5Myd0amsF2g2gwreJ/lmEv55WdpnU8JOKvSxdA=
 
 before_install:
-# - mysql -u root --password="" < setup_db_and_test_user.sql
-# TODO Set up user in database
+# Create mysql tables
+- mysql -u root < create_tables.sql
+# Set up testing user
+# This is done here to utilize travis ci's encryption of secrets
+- mysql -u root -e "insert into users (username, email, spotify_auth_token, spotify_refresh_token, is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user', 'test_user@test.com', '$AUTH_TOKEN', '$REFRESH_TOKEN', '1', '-1', '-1');
+"
 - echo 'DB_HOST=127.0.0.1' > .env
 - echo 'DB_USER=root' > .env
 - echo 'DB_PASS=""' > .env
