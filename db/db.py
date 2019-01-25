@@ -9,20 +9,20 @@ def get_db_creds():
     load_dotenv()
 
     creds = {}
-    creds['DB_HOST'] = os.getenv('DB_HOST')
-    creds['DB_USER'] = os.getenv('DB_USER')
-    creds['DB_PASS'] = os.getenv('DB_PASS')
-    creds['DB_NAME'] = os.getenv('DB_NAME')
+    creds['DB_HOST'] = 'localhost'
+    creds['DB_USER'] = 'root'
+    creds['DB_PASS'] = ''
+    creds['DB_NAME'] = 'playlists'
 
     return creds
 
 def conn():
     creds = get_db_creds()
     return MySQLdb.connect(
-        host='localhost',
-        user='root',
-        passwd='',
-        db='playlists'
+        host=creds['DB_HOST'],
+        user=creds['DB_USER'],
+        passwd=creds['DB_PASS'],
+        db=creds['DB_NAME']
     )
 
 def get_time_of_last_track_play(username):
