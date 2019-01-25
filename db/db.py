@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import MySQLdb
 
 def get_db_creds():
-    # Ensure secrets are loaded
     load_dotenv()
 
     creds = {}
@@ -22,23 +21,122 @@ def conn():
         host=creds['DB_HOST'],
         user=creds['DB_USER'],
         passwd=creds['DB_PASS'],
-        db=creds['DB_NAME'],
+        db=creds['DB_NAME']
     )
 
-def get_user_id_for_username(username):
+def get_time_of_last_track_play(username):
+    col_name = 'time_of_last_track_played'
+
     con = conn()
     cur = MySQLdb.cursors.DictCursor(con)
-    cur.execute("""
-        SELECT id from users where username = %s
-    """, (username,))
+    query = f'SELECT {col_name} from users where username="{username}"'
+    cur.execute(query)
     result = cur.fetchone()
+    con.close()
+
+    if not result:
+        print('finding time of last track play, did not find user in db, exiting')
+        sys.exit(1)
+    else:
+        return result[col_name]
+
+def update_time_of_last_track_play(username, seconds_since_epoch):
+    col_name = 'time_of_last_track_played'
+    query = f'UPDATE users SET {col_name}="{seconds_since_epoch}" where username="{username}"'
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    con.commit()
+    con.close()
+
+def save_track_if_not_exists(track):
+    '''
+    track - dict, keys: name, uri, id, duration_ms
+    '''
+    query = f'''
+        INSERT IGNORE INTO tracks 
+            (name, spotify_uri, spotify_id, duration_ms)
+        VALUES
+            (%s, %s, %s, %s)
+    '''
+
+    values = (track['name'], track['uri'], track['id'], track['duration_ms'])
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query, values)
+    con.commit()
+    con.close()
+
+def get_all_users():
+    query = f'''
+    SELECT username from users
+    '''
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    results = cur.fetchall()
+    con.close()
+
+    return_value = []
+    for x in results:
+        return_value.append(x['username'])
+
+    return return_value
+
+def save_played_song(username, track_uri, played_at):
+    ''' Save played track into songs_played table
+    Convert track_uri to the pk auto inc track_id from mysql
+    '''
+    user_id = get_user_id_for_username(username)
+    track_id = get_track_id_for_track_uri(track_uri)
+
+    query = f'''
+        INSERT INTO songs_played
+            (track_id, user_id, played_at)
+        VALUES
+                (%s, %s, %s)
+    '''
+
+    values = (track_id, user_id, played_at)
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query, values)
+    con.commit()
+    con.close()
+
+def get_track_id_for_track_uri(track_uri):
+    col_name = 'id'
+    query = f'SELECT {col_name} from tracks where spotify_uri ="{track_uri}"'
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    result = cur.fetchone()
+    con.close()
+
+    if not result:
+        print(f'did not find track by track_uri {track_uri} in db, exiting')
+        sys.exit(1)
+    else:
+        return result[col_name]
+
+def get_user_id_for_username(username):
+    col_name = 'id'
+    query = f'SELECT {col_name} from users where username="{username}"'
+
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    result = cur.fetchone()
+    con.close()
+
     if not result:
         print('did not find user in db, exiting')
         sys.exit(1)
     else:
-        user_id = result['id']
-
-    return user_id 
+        return result[col_name]
 
 # TODO: use release_start, release_end
 def filter_to_playlist(filter_args):
@@ -83,6 +181,7 @@ def filter_to_playlist(filter_args):
     cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query)
     results = cur.fetchall()
+    con.close()
 
     return_value = []
     for x in results:
