@@ -14,7 +14,6 @@ def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp
 
       So, cut off the millis and timestamp, and convert to seconds since epoch.
     '''
-
     return calendar.timegm((time.strptime(timestamp.rsplit('.')[0], "%Y-%m-%dT%H:%M:%S")))
 
 def find_latest_timestamp(played_tracks):
