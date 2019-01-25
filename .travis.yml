@@ -21,7 +21,7 @@ before_install:
 - query=$(echo $query | sed "s/AUTH_TOKEN_VALUE/$AUTH_TOKEN_VALUE/")
 - query=$(echo $query | sed "s/REFRESH_TOKEN_VALUE/$REFRESH_TOKEN_VALUE/")
 - echo $query
-- mysql -u root -e $query
+- mysql -u root -e "$query"
 - mysql -u root -e "use playlists; select * from users;"
 - echo 'DB_HOST=127.0.0.1' > .env
 - echo 'DB_USER=root' > .env
