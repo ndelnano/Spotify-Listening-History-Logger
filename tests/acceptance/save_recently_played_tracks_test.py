@@ -3,4 +3,4 @@ from spotify.save_recently_played_tracks import call_recently_played_endpoint
 
 def test_call_recently_played_endpoint():
     test_user = get_all_users()[0]
-    print(call_recently_played_endpoint(test_user))
+    assert call_recently_played_endpoint(test_user) != None
