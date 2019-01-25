@@ -20,10 +20,12 @@ before_install:
 - REFRESH_TOKEN_VALUE=$(echo $REFRESH_TOKEN | sed 's/REFRESH_TOKEN=//')
 - query="use playlists; insert into users (username, email, spotify_auth_token, spotify_refresh_token, is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user', 'test_user@test.com', '$AUTH_TOKEN_VALUE', '$REFRESH_TOKEN_VALUE', '1', '-1', '-1');"
 - mysql -u root -e "$query"
-- mysql -u root -e "use playlists; select * from users;"
 - echo $SPOTIFY_CLIENT_ID > .env
 - echo $SPOTIFY_CLIENT_SECRET > .env
-- echo $query
+- echo 'DB_HOST=127.0.0.1' > .env
+- echo 'DB_USER=root' > .env
+- echo 'DB_PASS=' > .env
+- echo 'DB_NAME=playlists' > .env
 install:
 - pip install -r requirements.txt
 script: pytest
