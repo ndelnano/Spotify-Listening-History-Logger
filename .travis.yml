@@ -28,4 +28,4 @@ before_install:
 - echo 'DB_NAME=playlists' > .env
 install:
 - pip install -r requirements.txt
-script: pytest
+script: pytest -v -s

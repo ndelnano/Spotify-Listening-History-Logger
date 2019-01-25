@@ -7,6 +7,8 @@ import MySQLdb
 def get_db_creds():
     # Ensure secrets are loaded
     load_dotenv()
+    print('printing secrets:')
+    print(os.getenv('DB_HOST'))
 
     creds = {}
     creds['DB_HOST'] = 'localhost'
