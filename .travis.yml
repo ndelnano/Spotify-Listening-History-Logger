@@ -16,20 +16,23 @@ env:
   - secure: ZLy42OQePqmC5KjWiW7MSAtjA9i/ksV0/VkASIbnAjcD9pOgfVVLjpcysY8G7uQ/k0o9QJEtOUtkm63r3k44OMDVCBrSt9hcM3H0FTd7psagJRyhhY1Z0G56RZtsDR80GD25AcKDoHrdFcb+kCaGBuuPKLNUqL/yuSF0E2Wp8TJ3hakHc4VLI880/Kh5WFQQV/KBQD6XeZ6OjTeBvXDZPMq4gsfvsVyvUcfs3Y+YLS2yvUG+54qe2G83jRmoUjXKx218Ot5BmLdngYW1YKPdm6UnyH4VqG4NKPXECtCeY/C5VO7neVzs4ZV493BTTI6Ob1ROC2a4BX9qLusbwBMMdZAn5QKqYMgfdGs3qL6bWNtPWasXfmOe93Ix13N1CStv9Fos7qn6GYOBVHPJEItcv1LFQdIcND9j9dGZqEZaI0YxRuT31ZhsNKA2KhNEZMm2M/aPRbTcfralJNS7lshPkvTwhyeHSPAYS1tcNqxtmahtYdqeL9w1Pu9FUi3l6sOEZsL0PrgsIVd6My0kfLj+F5cmVmulWMxB2ukcZMUAPYaioyZuZ9dyg3YddHX/iihhCsjEtBOLrjzZaSOX98BibcQWkIn/GiW3B9sAhwpdqtFQJ8VaYfjf6E5e+hGTy4XnjMEQd3JWyNwvhoWHDkTjhovUQJ1kPjMIgN3KTwKv5e4=
   - secure: cjYBi8Wy8nxziKe+IZNvWbVR50k8pciDGlAMHaNUaZEN3FMG3PxcpUQ7e/p4+jzBDMxSPN72Yuj9zGrNVe7/Pt6dJ9u6AxdFH9PdB/3AZ+D55zkudG89NLpfeWkr1Or45m8tSoxiwQO2VQAtYwUGKr4U0//t08I4OICGT8XyQ45JhSwok/CnpKC0RLZzsjKu3Du/OO42OPlHEIx1AJQ7tsQqmbrGruyDjpxDDAtjmr1Vm+KpFAWuq2twrQN8tJQ6c8THOYMN2BL7kiI8fZIWzQTWpGLmTMvigXlSXlsdtNCU0jKA1RgdoRF89LrOYDtkqR3UzjVemuY793g70kCR7YmelfQkltMM2vFg2g6to+BsIFZK+zLr+RTC3cnSoBEEjUpjPqxXPVvL+1Cmpt+dJO9wEsxpNLiInL6yLrNHeStt8bsrKluGUWF8Ozk+N+ApTo05t0toj6Q388xDYRgu0UsLej0hO2Ue3P2PsviTC36ITyXiy0uUyLDiHfcss/uaLK0u0QDylENhIihmM43HmrY8ewpwWpuxGcLGRi7eeGn6HHPkMYn1oI6cUpdLgUHxnMVlgmF2dwUaWImUZSLKdnPmG+4XtgFWtdIYyNlak5MCSz/96oxlRP0gMue7jxkO67DqK8myR7QD2ChDttV1sUfvsbmn2R8Q6JVCoACnsoQ=
 before_install:
+# Create db tables
 - mysql -u root < create_tables.sql
+# Set up testing user, this is done here to utilize travis ci's encryption of secrets
+# variables are encrypted in form var=value, so strip out 'var=' to get just 'value'
 - AUTH_TOKEN_VALUE=$(echo $AUTH_TOKEN | sed 's/AUTH_TOKEN=//')
 - REFRESH_TOKEN_VALUE=$(echo $REFRESH_TOKEN | sed 's/REFRESH_TOKEN=//')
 - query="use playlists; insert into users (username, email, spotify_auth_token, spotify_refresh_token,
   is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user',
   'test_user@test.com', '$AUTH_TOKEN_VALUE', '$REFRESH_TOKEN_VALUE', '1', '-1', '-1');"
 - mysql -u root -e "$query"
-# DB_* variables are not secret, but travis seems to not allow modifying a file
+# DB_* variables are not secret, bc travis seems to not allow modifying a file
 # that contains secrets. I had tried `echo 'DB_HOST=127.0.0.1' > .env` but nothing happened.
 # DB_HOST=127.0.0.1, DB_USER=root, DB_PASS='', DB_NAME=playlists
-- DB_HOST=127.0.0.1
-- DB_USER=root
-- DB_PASS=''
-- DB_NAME=playlists
+- echo $DB_HOST > .env
+- echo $DB_USER > .env
+- echo $DB_PASS > .env
+- echo $DB_NAME > .env
 - echo $SPOTIFY_CLIENT_ID > .env
 - echo $SPOTIFY_CLIENT_SECRET > .env
 install:
