@@ -1,8 +1,6 @@
 sudo: required
 dist: xenial
-language: python
-python:
-- '3.6'
+language: generic
 services:
 - mysql
 env:
@@ -20,6 +18,4 @@ before_install:
 - echo $SPOTIFY_CLIENT_ID > .env
 - echo $SPOTIFY_CLIENT_SECRET > .env
 - sudo apt-get install tox
-install:
-- pip install -r requirements.txt
 script: make test
