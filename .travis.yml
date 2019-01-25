@@ -20,4 +20,4 @@ before_install:
 - echo $SPOTIFY_CLIENT_SECRET > .env
 install:
 - pip install -r requirements.txt
-script: pytest
+script: make test
