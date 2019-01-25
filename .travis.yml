@@ -16,7 +16,7 @@ before_install:
 - mysql -u root < create_tables.sql
 # Set up testing user
 # This is done here to utilize travis ci's encryption of secrets
-- mysql -u root -e "insert into users (username, email, spotify_auth_token, spotify_refresh_token,
+- mysql -u root -e "use playlists; insert into users (username, email, spotify_auth_token, spotify_refresh_token,
   is_spotify_user, spotify_time_of_last_track_played, expires_at) VALUES ('test_user',
   'test_user@test.com', '$AUTH_TOKEN', '$REFRESH_TOKEN', '1', '-1', '-1');"
 - echo 'DB_HOST=127.0.0.1' > .env
