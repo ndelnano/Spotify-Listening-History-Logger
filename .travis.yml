@@ -1,0 +1,25 @@
+dist: xenial
+language: python
+python:
+  - "3.6"
+services:
+  - mysql
+
+env:
+  global:
+  - secure:
+
+before_install:
+  # - mysql -u root --password="" < setup_db_and_test_user.sql
+  # Set up user in database
+  - echo 'DB_HOST=127.0.0.1' > .env
+  - echo 'DB_USER=root' > .env
+  - echo 'DB_PASS=""' > .env
+  - echo 'DB_NAME=playlists' > .env
+  - echo $SPOTIFY_CLIENT_ID > .env
+  - echo $SPOTIFY_CLIENT_SECRET > .env
+
+install:
+  - pip install -r requirements.txt
+
+script: pytest
