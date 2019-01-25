@@ -1,4 +1,4 @@
-/* A database `playlists` must exist first */
+create database playlists;
 use playlists;
 /* 
  *  **tables must be created in this order due to foreign key constraints**
