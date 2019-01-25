@@ -18,7 +18,7 @@ sudo apt install mysql-server
 sudo mysql_secure_installation
 
 
-# Environment variables
+## Environment variables
 - SPOTIFY_CLIENT_ID
 - SPOTIFY_CLIENT_SECRET
 - DB_HOST
@@ -27,8 +27,11 @@ sudo mysql_secure_installation
 - DB_NAME
 These are set in travis CI, and via a .env file in the project root dir for deployments.
 
-# Could I do this Apple music?
+## Could I do this Apple music?
 Probably! I didn't write this project generically because:
 - Apple requires you to be a member of their developer program to hit the Apple music recently played API endpoint :/
 - Soundcloud doesn't have a similar endpoint, so I only saw myself using this for Spotify.
 - Laziness -- it would be super easy to do! If you're interested in adding Apple music support let me know! I'd be willing to help.
+
+## What type of playlists can I make with this?
+See the README in the [recently-played-playlists-parser](github.com/ndelnano/recently-played-playlists-parser)
