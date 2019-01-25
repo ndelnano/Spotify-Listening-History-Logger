@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import MySQLdb
 
 def get_db_creds():
+    load_dotenv()
+
     creds = {}
     creds['DB_HOST'] = os.getenv('DB_HOST')
     creds['DB_USER'] = os.getenv('DB_USER')
