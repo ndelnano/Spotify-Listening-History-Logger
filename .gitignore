@@ -3,4 +3,4 @@ venv
 tags
 *.py[co]
 .tox
-rpp_collector.egg-info/
+*.egg-info/
