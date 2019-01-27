@@ -1,3 +1,10 @@
+notifications:
+  email:
+    recipients:
+      - nickdelnano@gmail.com
+    on_success: never
+    on_failure: always
+
 dist: xenial
 language: python
 python:
