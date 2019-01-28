@@ -7,6 +7,11 @@ def test_iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch():
     expected_unix_time = 1481661844
     assert iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(sample_timestamp_from_spotify_api) == expected_unix_time
 
+    # Also test the case where no millis are attached to timestamp. I've seen this happen.
+    sample_timestamp_from_spotify_api_without_millis = '2016-12-13T20:44:04Z'
+    expected_unix_time = 1481661844
+    assert iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(sample_timestamp_from_spotify_api_without_millis) == expected_unix_time
+
 def test_find_latest_timestamp():
     latest_timestamp = 3000000000
     tracks = list(dict())
