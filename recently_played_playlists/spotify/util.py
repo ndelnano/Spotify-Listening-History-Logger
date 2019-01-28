@@ -5,6 +5,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 
 from recently_played_playlists.db.db import get_db_creds
+from recently_played_playlists.db.db import map_playlist_params_to_query
+from recently_played_playlists.db.db import exec_process_playlist_query
 
 def get_spotify_app_creds():
     # Ensure secrets are loaded
@@ -26,7 +28,9 @@ def get_spotify_client_for_username(username):
     return spotipy.Spotify(client_credentials_manager=credentials)
 
 def process_playlist(parameters):
-    tracks = db.db.filter_to_playlist(parameters)
+    playlist_query = db.db.map_playlist_params_to_query(parameters)
+    tracks = db.db.exec_process_playlist_query(playlist_query)
+
     saved = parameters['saved']
 
     print('Got this many tracks back from the query')

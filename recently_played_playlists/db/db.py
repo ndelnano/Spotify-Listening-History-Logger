@@ -138,27 +138,34 @@ def get_user_id_for_username(username):
     else:
         return result[col_name]
 
-# TODO: use release_start, release_end
-def filter_to_playlist(filter_args):
-    '''
+'''
+  TODO: use release_start, release_end
+  TODO it would be nice to have an abstraction to build a query
+    so that I'm not building a string :) -- see https://github.com/kayak/pypika
+  Some work would be necessary here if I ever implement another 'agby' or aggregate by field 
+  other than 'track_id' in recently-played-playlists-parser. I don't have plans for that at this time.
+  One example is aggregate by 'album_id' to find most played albums.
+'''
+def map_playlist_params_to_query(filter_args):
+    ''' Turn filter_args into a SQL query.
     '''
     user_id = get_user_id_for_username(filter_args['username'])
 
     # TODO avoid sql injection here. formatting params via execute only
     # works for values in WHERE clause according to the docs
     query = """
-    SELECT spotify_id FROM 
+    SELECT spotify_id FROM
         (
-            SELECT 
-                COUNT(*) as num_plays, 
-                track_id as id 
-            FROM songs_played 
-                WHERE 
+            SELECT
+                COUNT(*) as num_plays,
+                track_id as id
+            FROM songs_played
+                WHERE
                     user_id={user_id}
                     AND played_at > {time_begin}
                     AND played_at < {time_end}
                 GROUP BY {agby}
-        ) t1 
+        ) t1
         INNER JOIN tracks using (id)
     """.format(
         user_id=user_id,
@@ -170,25 +177,13 @@ def filter_to_playlist(filter_args):
     # If comparator and count are set, add them to the query.
     if filter_args['comparator'] > -1 and filter_args['count'] > -1:
         order_by = get_order_by(filter_args['comparator'])
-        comparator = get_str_of_comparator(filter_args['comparator'])
+        comparator = str_of_comparator(filter_args['comparator'])
         query += ' WHERE num_plays {comparator} {count} ORDER BY num_plays {order_by}'.format(comparator=comparator, count=filter_args['count'], order_by=order_by)
+    # Limit was not == default value, so add it to query.
     if filter_args['limit'] > -1:
         query += ' LIMIT {limit}'.format(limit=filter_args['limit'])
 
-    print(query)
-        
-    con = conn()
-    cur = MySQLdb.cursors.DictCursor(con)
-    cur.execute(query)
-    results = cur.fetchall()
-    con.close()
-
-    return_value = []
-    for x in results:
-        return_value.append(x['spotify_id'])
-
-    return return_value
-    
+    return query
 
 def get_order_by(comparator):
     '''
@@ -210,7 +205,7 @@ def get_order_by(comparator):
     else:
         raise Exception('Bad value for comparator')
 
-def get_str_of_comparator(comparator):
+def str_of_comparator(comparator):
     if comparator == 0:
         return "<"
     elif comparator == 1:
@@ -221,3 +216,17 @@ def get_str_of_comparator(comparator):
         return ">="
     else:
         raise Exception('Bad value for comparator')
+
+def exec_process_playlist_query(query):
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+    cur.execute(query)
+    results = cur.fetchall()
+    con.close()
+
+    return_value = []
+    for x in results:
+        return_value.append(x['spotify_id'])
+
+    return return_value
+    
