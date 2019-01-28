@@ -18,6 +18,8 @@ sudo apt install mysql-server
 sudo mysql_secure_installation
 
 
+TODO: document moving .env file into place after `pip3 installing recently-played-playlists`
+
 ## Environment variables
 - SPOTIFY_CLIENT_ID
 - SPOTIFY_CLIENT_SECRET
@@ -25,6 +27,8 @@ sudo mysql_secure_installation
 - DB_USER
 - DB_PASS
 - DB_NAME
+- FLASK_APP
+
 These are set in travis CI, and via a .env file in the project root dir for deployments.
 
 ## Could I do this Apple music?

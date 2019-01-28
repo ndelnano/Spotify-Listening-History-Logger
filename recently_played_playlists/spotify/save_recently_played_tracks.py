@@ -1,8 +1,8 @@
 import calendar
 import time
 
-from spotify.util import get_spotify_client_for_username
-from db.db import get_all_users, get_time_of_last_track_play, save_track_if_not_exists, save_played_song, update_time_of_last_track_play
+from recently_played_playlists.spotify.util import get_spotify_client_for_username
+from recently_played_playlists.db.db import get_all_users, get_time_of_last_track_play, save_track_if_not_exists, save_played_song, update_time_of_last_track_play
 
 def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp):
     '''
@@ -10,11 +10,11 @@ def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp
       "Note that this method does not handle time zones, so trying to parse 2004-06-03T12:34:56-0700 or 
       2004-06-03T12:34:56Z will fail. This is a fundamental limitation of time.strptime for which there is no easy workaround."
 
-      Spotify returns timestamps in the form 2004-06-03T12:34:56.123Z, which applies to this format.
+      Spotify returns timestamps in the form 2004-06-03T12:34:56.123Z, which applies to this format. I've also learned that sometimes no millis are attached!
 
       So, cut off the millis and timestamp, and convert to seconds since epoch.
     '''
-    return calendar.timegm((time.strptime(timestamp.rsplit('.')[0], "%Y-%m-%dT%H:%M:%S")))
+    return calendar.timegm(time.strptime(timestamp.replace('Z', '', 1).rsplit('.')[0], "%Y-%m-%dT%H:%M:%S"))
 
 def find_latest_timestamp(played_tracks):
     latest_timestamp = -1
@@ -87,10 +87,12 @@ def save_recently_played_tracks(username):
     latest_song_play = find_latest_timestamp(played_tracks)
     update_time_of_last_track_play(username, latest_song_play)
 
+    print(f'Saved {len(played_tracks)} to songs_played table for {username}')
+
     return 0
 
 
-if __name__ == "__main__":
+def main():
     usernames = get_all_users()
     for user in usernames:
         save_recently_played_tracks(user)

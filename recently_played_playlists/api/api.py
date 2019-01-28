@@ -1,7 +1,6 @@
-import spotify.util
+import recently_played_playlists.spotify.util
 
-from flask import Flask
-from flask import request
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -46,3 +45,6 @@ def make_playlist():
     spotify.util.create_playlist(username, track_ids, playlist_name, description)
 
     return 'great!'
+
+def main():
+    app.run()

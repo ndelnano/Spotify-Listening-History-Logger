@@ -14,5 +14,16 @@ setup(
         'ndelnano-spotipy',
     ],
     license='LICENSE.txt',
-    packages=['spotify', 'db']
+    packages=[
+        'recently_played_playlists',
+        'recently_played_playlists.api',
+        'recently_played_playlists.cli',
+        'recently_played_playlists.db',
+        'recently_played_playlists.spotify',
+    ],
+    entry_points = {
+        'console_scripts': [
+            'recently-played-playlists = recently_played_playlists.cli.main:main'
+        ]
+    }
 )
