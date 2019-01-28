@@ -24,6 +24,7 @@ CREATE TABLE tracks (
   spotify_uri VARCHAR(100),
   spotify_id VARCHAR(100),
   duration_ms INT,
+  release_time INT,
   UNIQUE KEY(spotify_uri)
 );
 
