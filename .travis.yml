@@ -20,6 +20,7 @@ env:
   - secure: riMov07lyrd3SbizGtmaf9RF6wWQviaitrK5VGyDQoZZf3IhGTvyv+rVUfy/cshHWWFPeYj5dyPBVdSh2/F3GBL5hr0PpcGP3KwEUoi/r5ZsMK/EkWD3B073aeTOSPBBgf9Lw3/kTFkxZgikrhKsfORZoWLld1xDZmjxUgA1XgTDI0YYBLWm3vRESMtHnSHzredeg1Mzbggycrlqh7fmpgduaNb09bwoAaK9mdVkQYzGWPZB5QbypDkEXuu1ucGe+5RyIwCEjPhR+QVhSwhq1njbCsoG73R7usmJvvlrJMiQM6kqt8Jc5Np5SwZ5MnfaoLocvY+TlyKo/wrtXeYCLenq+0lX7fPuNn2tEm026xeTTknyDD3I2spj4Jv6kBDTunO3I4Wa2Uzh9/JwFOWzUrBg/b0eMphUD0wyQaKLSmyrqqps2V5Bu1Kpxszgc185m1IO6G53rxCL1uzQRtTd4OkzKNYun144BfWHPscR7Ai5vuWtc0rsGmrsOZQZ0iZBg0STKHnoUMP7sK5DJXhlUuCpqT8yLICBRHQlFr8jusuHKgNzYJMdR6D0ziGyHATiIgP3S2yqCEz0UI2OUA6UUzls8fQ9bNfiaHzxJ34Ya+Ya0ea0pz0CT5oQB5my2pnxBGkTDvO2zz9766NeMLqThWzmE9nlO5LW/1WL/8f/ooY=
 before_install:
 # Create db tables
+- mysql -u root -e 'create database playlists'
 - mysql -u root < create_tables.sql
 # Set up testing user, this is done here to utilize travis ci's encryption of secrets
 # variables are encrypted in form var=value, so strip out 'var=' to get just 'value'
