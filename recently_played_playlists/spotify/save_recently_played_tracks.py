@@ -1,8 +1,8 @@
 import calendar
 import time
 
-from spotify.util import get_spotify_client_for_username
-from db.db import get_all_users, get_time_of_last_track_play, save_track_if_not_exists, save_played_song, update_time_of_last_track_play
+from recently_played_playlists.spotify.util import get_spotify_client_for_username
+from recently_played_playlists.db.db import get_all_users, get_time_of_last_track_play, save_track_if_not_exists, save_played_song, update_time_of_last_track_play
 
 def iso_8601_timestamp_with_millis_and_timezone_to_seconds_since_epoch(timestamp):
     '''
@@ -90,7 +90,7 @@ def save_recently_played_tracks(username):
     return 0
 
 
-if __name__ == "__main__":
+def main():
     usernames = get_all_users()
     for user in usernames:
         save_recently_played_tracks(user)

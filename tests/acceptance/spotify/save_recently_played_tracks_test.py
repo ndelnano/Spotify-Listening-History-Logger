@@ -1,8 +1,8 @@
 import re
 
-from db.db import get_all_users
-from spotify.save_recently_played_tracks import call_recently_played_endpoint
-from spotify.util import get_spotify_client_for_username
+from recently_played_playlists.db.db import get_all_users
+from recently_played_playlists.spotify.save_recently_played_tracks import call_recently_played_endpoint
+from recently_played_playlists.spotify.util import get_spotify_client_for_username
 
 def test_call_recently_played_endpoint():
     test_user = get_all_users()[0]

@@ -1,11 +1,11 @@
 import os
 import sys
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import MySQLdb
 
 def get_db_creds():
-    load_dotenv()
+    load_dotenv(find_dotenv())
 
     creds = {}
     creds['DB_HOST'] = os.getenv('DB_HOST')

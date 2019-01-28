@@ -1,14 +1,14 @@
 import os
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 
-import db.db
+from recently_played_playlists.db.db import get_db_creds
 
 def get_spotify_app_creds():
     # Ensure secrets are loaded
-    load_dotenv()
+    load_dotenv(find_dotenv())
 
     creds = {}
     creds['SPOTIFY_CLIENT_ID'] = os.getenv('SPOTIFY_CLIENT_ID')
@@ -19,7 +19,7 @@ def get_spotify_app_creds():
 def get_spotify_client_for_username(username):
     credentials = SpotifyClientCredentials(
         username, 
-        db_creds=db.db.get_db_creds(),
+        db_creds=get_db_creds(),
         spotify_app_creds=get_spotify_app_creds()
     )
 
