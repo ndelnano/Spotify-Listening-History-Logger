@@ -6,7 +6,7 @@ This repo holds various functionalities for supporting the [recently-played-play
   - Poll spotify's [get-recently-played endpoint](https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/) and save new track plays to MySQL. I poll this API endpoint as a cron to preserve my listening history.
   - Save various track data not included in the get-recently-played endpoint by calling the [get-several-tracks endpoint](https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-tracks/) Currently, this is in development for adding the `release_date` attribute to each track.
 - HTTP API for supporting queries from playlist-parser
-  - `/process_filter` -- Transform a `Playlist` (list of filters) into an SQL query, execute it, and return a list of spotify `track_id`'s. For what is possible, see recently-played-playlits-parser.
+  - `/process_filter` -- Transform a `Playlist` (list of filters) into an SQL query, execute it, and return a list of spotify `track_id`'s. For what is possible, see recently-played-playlists-parser.
   - `/make_playlist` -- Create a playlist, given a list of spotify `track_id`'s.
 
 You should not care to interact with the API yourself -- you should use the recently-played-playlists-parser.
@@ -19,7 +19,7 @@ The acceptance tests use MySQL. You can either:
 - Clone this repo, install tox, and develop unit tests while relying on travisci for running acceptance tests
 - Use puppeted installation docs to run MySQL, do the above steps, and add a .env file
 
-Note -- I don't have spotify tokens for development / testing ;( You'll want to use your own. Travisci is set up to use my set.
+Note -- I don't have spotify tokens for development / testing ;( You'll want to use your own. See the puppet installation docs for generating them.
 
 ## Environment variables
 This list serves as documentation. If you are installing, you really want to use the puppet repo and its instructions.
@@ -42,7 +42,7 @@ Two subcommands are implemented. See [recently_played_playlists/cli/main.py](htt
 In the puppeted installation, `save-played-tracks` is run as a cron, and `api` is run as a systemd service.
 
 ## Important note
-Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have listened to. That is why this repo polls the endpoint and saves the data. Your listening history data grows exponentially more valuable with time, so you cannot make interesting playlists immediately after you install this application. Personally, I created the `save-recently-played` functionality cron first, and it ran for almost 1 year before I implemented the parser and the puppeted installation. 
+Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have listened to. That is why this repo polls the endpoint and saves the data. Sadly, you won't be able to make interesting playlists immediately after you install this application -- it will take some time to have enough data.
 
 ## Where is the magic?
 I'm so glad you asked! It is in [recently_played_playlists/db/db.py](https://github.com/ndelnano/recently-played-playlists/blob/master/recently_played_playlists/db/db.py):
@@ -99,9 +99,6 @@ Listening history data becomes interesting when there's lots of it (or when its 
 
 My $5/mo DigitalOcean droplet supports me and 4 friends, but it wouldn't support 100 or 1000 people.
 
-# Could I do this Apple music?
-Probably! I didn't write this project generically because:
-- Apple requires you to be a member of their developer program to hit the Apple music recently played API endpoint, which costs $$ :/
-- Soundcloud doesn't have a similar endpoint, so I only saw myself using this for Spotify.
-
-It would be super easy to do! If you're interested in adding Apple music support (and paying the developer program fee) let me know! I'd be willing to help with the implementation.
+# What about Apple music or Soundcloud?
+- Apple requires you to be a member of their developer program to hit their recently played API endpoint, which costs $$ :/
+- Soundcloud doesn't have a similar endpoint
