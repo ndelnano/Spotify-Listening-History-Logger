@@ -19,7 +19,7 @@ The acceptance tests use MySQL. You can either:
 - Clone this repo, install tox, and develop unit tests while relying on travisci for running acceptance tests
 - Use puppeted installation docs to run MySQL, do the above steps, and add a .env file
 
-Note -- I don't have spotify tokens for development / testing ;( You'll want to use your own. See the puppet installation docs for generating them.
+Note -- I don't have spotify tokens for development / testing ;( You'll want to use your own. See the puppet installation docs for how to generate them.
 
 ## Environment variables
 This list serves as documentation. If you are installing, you really want to use the puppet repo and its instructions.
@@ -42,10 +42,10 @@ Two subcommands are implemented. See [recently_played_playlists/cli/main.py](htt
 In the puppeted installation, `save-played-tracks` is run as a cron, and `api` is run as a systemd service.
 
 ## Important note
-Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have listened to. That is why this repo polls the endpoint and saves the data. Sadly, you won't be able to make interesting playlists immediately after you install this application -- it will take some time to have enough data.
+Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have played. That is why this repo polls the endpoint and saves the data. Sadly, you won't be able to make interesting playlists immediately after you install this application -- it will take some time to have enough data.
 
 ## Where is the magic?
-I'm so glad you asked! It is in [recently_played_playlists/db/db.py](https://github.com/ndelnano/recently-played-playlists/blob/master/recently_played_playlists/db/db.py):
+I'm so glad you asked! It's in [recently_played_playlists/db/db.py](https://github.com/ndelnano/recently-played-playlists/blob/master/recently_played_playlists/db/db.py):
 ```
 query = """
 SELECT spotify_id FROM
@@ -99,6 +99,6 @@ Listening history data becomes interesting when there's lots of it (or when its 
 
 My $5/mo DigitalOcean droplet supports me and 4 friends, but it wouldn't support 100 or 1000 people.
 
-# What about Apple music or Soundcloud?
+# What about Apple Music or Soundcloud?
 - Apple requires you to be a member of their developer program to hit their recently played API endpoint, which costs $$ :/
 - Soundcloud doesn't have a similar endpoint
