@@ -28,12 +28,13 @@ def get_spotify_client_for_username(username):
     return spotipy.Spotify(client_credentials_manager=credentials)
 
 def process_playlist(parameters):
-    playlist_query = db.db.map_playlist_params_to_query(parameters)
-    tracks = db.db.exec_process_playlist_query(playlist_query)
+    playlist_query = map_playlist_params_to_query(parameters)
+    tracks = exec_process_playlist_query(playlist_query)
 
     saved = parameters['saved']
 
     print('Got this many tracks back from the query')
+    print(tracks)
     print(len(tracks))
 
     # If the saved parameter was set, filter for it.
@@ -68,9 +69,10 @@ def check_tracks_saved(username, track_ids, saved):
 
     return filter_lists_based_on_value(value, track_ids, list_of_bools_in_order_of_track_ids)
 
-# TODO
 def create_playlist(username, track_ids, playlist_name, description):
     spotify = get_spotify_client_for_username(username)
+    print('track ids:')
+    print(track_ids)
 
     spotify_user_data = spotify.me()
     spotify_user_id = spotify_user_data['id']
@@ -97,12 +99,3 @@ def filter_lists_based_on_value(value, tracks, bools):
         if bools[x] == value:
             rv.append(tracks[x])
     return rv
-
-if __name__ == "__main__":
-    username='nickdelnano@gmail.com'
-    spotify = get_spotify_client_for_username(username)
-
-    track_ids= ['3HYVFFbl9Ci8amG99czVQy', '3aA7kPeiyHBTbd8DAPcPV9']
-
-    print(spotify.current_user_saved_tracks_contains(track_ids))
-

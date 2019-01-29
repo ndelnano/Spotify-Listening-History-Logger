@@ -39,3 +39,10 @@ Probably! I didn't write this project generically because:
 
 ## What type of playlists can I make with this?
 See the README in the [recently-played-playlists-parser](github.com/ndelnano/recently-played-playlists-parser)
+
+## Installing (WIP)
+- Create spotify developer app
+- Get your user tokens
+- Allocate a server
+- Edit and run puppet; place secrets and populate .env
+- Wa-lah!

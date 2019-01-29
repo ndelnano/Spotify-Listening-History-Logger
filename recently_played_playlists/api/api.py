@@ -1,4 +1,4 @@
-import recently_played_playlists.spotify.util
+from recently_played_playlists.spotify.util import create_playlist, process_playlist
 
 from flask import Flask, request
 
@@ -24,7 +24,7 @@ def process_filter():
     filter_args['release_start'] = request.args.get('release_start')
     filter_args['release_end'] = request.args.get('release_end')
 
-    return spotify.util.process_playlist(filter_args)
+    return process_playlist(filter_args)
 
 '''
 Query params: username, playlist_name
@@ -40,9 +40,13 @@ def make_playlist():
     playlist_name = request.args.get('playlist_name')
     description = request.args.get('description')
     print('Num tracks sent to /make_playlist')
+    if len(track_ids) == 1 and track_ids[0] == '':
+        return 'No tracks identified to fit this playlist, returning w/o a playlist\n'
+
+    print(track_ids)
     print(len(track_ids))
 
-    spotify.util.create_playlist(username, track_ids, playlist_name, description)
+    create_playlist(username, track_ids, playlist_name, description)
 
     return 'great!'
 

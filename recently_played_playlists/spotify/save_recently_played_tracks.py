@@ -75,11 +75,13 @@ def save_recently_played_tracks(username):
 
     played_tracks = call_recently_played_endpoint(username)
 
+    num_new_track_plays = 0
     # Save track plays that are newer than `time_of_last_track_played`
     for x in played_tracks:
         if int(x['played_at']) > int(time_of_last_track_played):
             save_track_if_not_exists(x)
             save_played_song(username, x['uri'], x['played_at'])
+            num_new_track_plays += 1
 
     # Update time of last play.
     # Find the max time value ourselves. Don't rely on spotify
@@ -87,7 +89,7 @@ def save_recently_played_tracks(username):
     latest_song_play = find_latest_timestamp(played_tracks)
     update_time_of_last_track_play(username, latest_song_play)
 
-    print(f'Saved {len(played_tracks)} to songs_played table for {username}')
+    print(f'Saved {num_new_track_plays} to songs_played table for {username}')
 
     return 0
 
