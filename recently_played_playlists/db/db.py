@@ -175,12 +175,12 @@ def map_playlist_params_to_query(filter_args):
     )
 
     # If comparator and count are set, add them to the query.
-    if filter_args['comparator'] > -1 and filter_args['count'] > -1:
+    if filter_args['comparator'] != -1 and filter_args['count'] != -1:
         order_by = get_order_by(filter_args['comparator'])
         comparator = str_of_comparator(filter_args['comparator'])
-        query += ' WHERE num_plays {comparator} {count} ORDER BY num_plays {order_by}'.format(comparator=comparator, count=filter_args['count'], order_by=order_by)
-    # Limit was not == default value, so add it to query.
-    if filter_args['limit'] > -1:
+        query += f" WHERE num_plays {comparator} {filter_args['count']} ORDER BY num_plays {order_by}"
+    # If limit was not set to default value, so add it to query.
+    if filter_args['limit'] != -1:
         query += ' LIMIT {limit}'.format(limit=filter_args['limit'])
 
     return query
