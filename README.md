@@ -6,8 +6,10 @@ This repo holds various functionalities for supporting the [recently-played-play
   - Poll spotify's [get-recently-played endpoint](https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/) and save this data to MySQL. I poll this API endpoint as a cron to preserve my listening history.
   - Save various song data not included in the get-recently-played endpoint by calling the [get-several-tracks endpoint](https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-tracks/) Currently, this is in development for adding the `release_date` attribute to each track.
 - HTTP API for supporting queries from playlist-parser
-  - /process_filter TODO add parameters -- returns tracks that match the filter
-  - /make_playlist TODO add parameters -- create playlist with supplied tracks
+  - /process_filter -- Transform a `Playlist` (list of filters) into an SQL query, execute it, and return a list of spotify `track_id`'s.
+  - /make_playlist -- Create a playlist, given a list of spotify `track_id`'s.
+
+You should not care to interact with these endpoints youself -- you should interact with them via the recently-played-playlists-parser.
 
 # Installing and running
 See [recently-played-playlists-puppet](https://github.com/ndelnano/recently-played-playlists-puppet) for a puppet module and detailed instructions.
