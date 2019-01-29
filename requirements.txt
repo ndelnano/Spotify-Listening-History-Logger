@@ -3,3 +3,5 @@ mysqlclient
 python-dotenv
 ndelnano-spotipy
 pytest
+bumpversion
+twine
