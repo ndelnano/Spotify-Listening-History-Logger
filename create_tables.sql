@@ -8,7 +8,6 @@ CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(30), 
   password VARCHAR(100),
-  email VARCHAR(100),
   registration_cookie VARCHAR(16),
   date_registered INT,
   spotify_auth_token VARCHAR(300),
