@@ -142,9 +142,10 @@ def get_user_id_for_username(username):
   TODO: use release_start, release_end
   TODO it would be nice to have an abstraction to build a query
     so that I'm not building a string :) -- see https://github.com/kayak/pypika
+
   Some work would be necessary here if I ever implement another 'agby' or aggregate by field 
   other than 'track_id' in recently-played-playlists-parser. I don't have plans for that at this time.
-  One example is aggregate by 'album_id' to find most played albums.
+  One useful example is aggregate by 'album_id' to find most played albums.
 '''
 def map_playlist_params_to_query(filter_args):
     ''' Turn filter_args into a SQL query.
@@ -153,6 +154,7 @@ def map_playlist_params_to_query(filter_args):
 
     # TODO avoid sql injection here. formatting params via execute only
     # works for values in WHERE clause according to the docs
+    # however! punt for now, since the mysql user doesn't have drop or delete grants :)
     query = """
     SELECT spotify_id FROM
         (
@@ -175,13 +177,13 @@ def map_playlist_params_to_query(filter_args):
     )
 
     # If comparator and count are set, add them to the query.
-    if filter_args['comparator'] > -1 and filter_args['count'] > -1:
+    if filter_args['comparator'] != -1 and filter_args['count'] != -1:
         order_by = get_order_by(filter_args['comparator'])
         comparator = str_of_comparator(filter_args['comparator'])
-        query += ' WHERE num_plays {comparator} {count} ORDER BY num_plays {order_by}'.format(comparator=comparator, count=filter_args['count'], order_by=order_by)
-    # Limit was not == default value, so add it to query.
-    if filter_args['limit'] > -1:
-        query += ' LIMIT {limit}'.format(limit=filter_args['limit'])
+        query += f" WHERE num_plays {comparator} {filter_args['count']} ORDER BY num_plays {order_by}"
+    # If limit is set, add it to the query.
+    if filter_args['limit'] != -1:
+        query += f" LIMIT {filter_args['limit']}"
 
     return query
 
