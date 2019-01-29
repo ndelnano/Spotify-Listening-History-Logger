@@ -2,20 +2,28 @@
 
 # About
 This repo holds various functionalities for supporting the [recently-played-playlists-parser](https://github.com/ndelnano/recently-played-playlists-parser).
-- Utilites for saving data of a user's recently played tracks from the spotify API and inserting them into MySQL
-  - Poll spotify's [get-recently-played endpoint](https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/) and save this data to MySQL. I poll this API endpoint as a cron to preserve my listening history.
-  - Save various song data not included in the get-recently-played endpoint by calling the [get-several-tracks endpoint](https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-tracks/) Currently, this is in development for adding the `release_date` attribute to each track.
+- Utilites for fetching a Spotify user's recently played tracks from the spotify API and saving them in MySQL.
+  - Poll spotify's [get-recently-played endpoint](https://developer.spotify.com/documentation/web-api/reference/player/get-recently-played/) and save new track plays to MySQL. I poll this API endpoint as a cron to preserve my listening history.
+  - Save various track data not included in the get-recently-played endpoint by calling the [get-several-tracks endpoint](https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-tracks/) Currently, this is in development for adding the `release_date` attribute to each track.
 - HTTP API for supporting queries from playlist-parser
-  - /process_filter -- Transform a `Playlist` (list of filters) into an SQL query, execute it, and return a list of spotify `track_id`'s.
-  - /make_playlist -- Create a playlist, given a list of spotify `track_id`'s.
+  - `/process_filter` -- Transform a `Playlist` (list of filters) into an SQL query, execute it, and return a list of spotify `track_id`'s. For what is possible, see recently-played-playlits-parser.
+  - `/make_playlist` -- Create a playlist, given a list of spotify `track_id`'s.
 
-You should not care to interact with these endpoints youself -- you should interact with them via the recently-played-playlists-parser.
+You should not care to interact with the API yourself -- you should use the recently-played-playlists-parser.
 
 # Installing and running
 See [recently-played-playlists-puppet](https://github.com/ndelnano/recently-played-playlists-puppet) for a puppet module and detailed instructions.
 
+## Setting up developer environment
+The acceptance tests use MySQL. You can either:
+- Clone this repo, install tox, and develop unit tests while relying on travisci for running acceptance tests
+- Use puppeted installation docs to run MySQL, do the above steps, and add a .env file
+
+Note -- I don't have spotify tokens for development / testing ;( You'll want to use your own. Travisci is set up to use my set.
+
 ## Environment variables
-Leaving these here serves more as documentation. If you are installing, you really want to look at the puppet repo.
+This list serves as documentation. If you are installing, you really want to use the puppet repo and its instructions.
+
 - SPOTIFY_CLIENT_ID
 - SPOTIFY_CLIENT_SECRET
 - DB_HOST
@@ -24,13 +32,20 @@ Leaving these here serves more as documentation. If you are installing, you real
 - DB_NAME
 - FLASK_APP
 
-These are set in travis CI, and via a file named `.env` in the project root dir for deployments.
+These are set in travis CI, and via a file named `.env` in the root project dir for deployments.
+
+## Running the code
+Two subcommands are implemented. See [recently_played_playlists/cli/main.py](https://github.com/ndelnano/recently-played-playlists/blob/master/recently_played_playlists/cli/main.py).
+- recently-played-playlists save-played-tracks
+- recently-played-playlists api
+
+In the puppeted installation, `save-played-tracks` is run as a cron, and `api` is run as a systemd service.
 
 ## Important note
-Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have listened to. That is why this repo polls the endpoint and saves the data. Your listening history data grows exponentially more valuable with time, so you cannot make interesting playlists as soon as you install this application. Personally, I created the `save-recently-played` functionality cron first, and it ran for almost 1 year before I implemented the parser and the puppeted installation. 
+Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have listened to. That is why this repo polls the endpoint and saves the data. Your listening history data grows exponentially more valuable with time, so you cannot make interesting playlists immediately after you install this application. Personally, I created the `save-recently-played` functionality cron first, and it ran for almost 1 year before I implemented the parser and the puppeted installation. 
 
 ## Where is the magic?
-I'm so glad you asked! It is in `recently_played_playlists/db/db.py`:
+I'm so glad you asked! It is in [recently_played_playlists/db/db.py](https://github.com/ndelnano/recently-played-playlists/blob/master/recently_played_playlists/db/db.py):
 ```
 query = """
 SELECT spotify_id FROM
@@ -59,34 +74,34 @@ if filter_args['comparator'] != -1 and filter_args['count'] != -1:
     comparator = str_of_comparator(filter_args['comparator'])
     query += f" WHERE num_plays {comparator} {filter_args['count']} ORDER BY num_plays {order_by}"
 
-# If limit was not set to default value, so add it to query.
+# If limit is set, add it to the query.
 if filter_args['limit'] != -1:
     query += ' LIMIT {limit}'.format(limit=filter_args['limit'])
 
 ```
-The basis of a playlist is this query. The parser allows for playlists to be composed of an `and` of playlists, `or` of playlists, or a `diff` of playlists. There is no restriction to how many playlists can be evaluated to generate a single playlist.
+This query is the basis of a playlist. The parser allows for playlists to be composed of an `and` of playlists, an `or` of playlists, or a `diff` of playlists. There is no restriction to how many playlists can be evaluated to generate a single playlist.
 
 Example: 
-- Top 100 most played from Jan 1 2016 to Jan 1 2017, that are not saved in my library
+- Top 100 most played from Jan 1 2016 to Jan 1 2017 that are not saved in my library
 
 More complicated example:
 - Top 100 most played from Jan 1 2016 to Jan 1 2017 AND Songs played < 3 times from Jan 1 2017 to Jan 1 2018.
   - Your most played in 2016, that you seem to have forgotten about in 2017!
 
-## What other types of query filters are supported?
-See the README in the [recently-played-playlists-parser](https://github.com/ndelnano/recently-played-playlists-parser)
+## What other filtering can be done?
+See the README in the [recently-played-playlists-parser](https://github.com/ndelnano/recently-played-playlists-parser) for all supported filters.
 
-## Have ideas on what else could be done?
-I'd love to hear them! See the README in the [recently-played-playlists-parser](https://github.com/ndelnano/recently-played-playlists-parser) for my ideas, and send me any via an issue....or pull request ;)
+## Have ideas for other filters?
+I'd love to hear! See the README in the [recently-played-playlists-parser](https://github.com/ndelnano/recently-played-playlists-parser) for my ideas, and send me any of your own via an issue....or pull request ;)
 
 # Why don't you run this as a service?
-- Listening history data becomes interesting when there's lots of it (or when its far in the past), and lots of data (or storing it for decades) means higher cloud computing costs. 
+Listening history data becomes interesting when there's lots of it (or when its far in the past), and lots of data (or storing it for decades) means higher cloud computing costs. 
 
 My $5/mo DigitalOcean droplet supports me and 4 friends, but it wouldn't support 100 or 1000 people.
 
 # Could I do this Apple music?
 Probably! I didn't write this project generically because:
-- Apple requires you to be a member of their developer program to hit the Apple music recently played API endpoint :/
+- Apple requires you to be a member of their developer program to hit the Apple music recently played API endpoint, which costs $$ :/
 - Soundcloud doesn't have a similar endpoint, so I only saw myself using this for Spotify.
 
-It would be super easy to do! If you're interested in adding Apple music support let me know! I'd be willing to help.
+It would be super easy to do! If you're interested in adding Apple music support (and paying the developer program fee) let me know! I'd be willing to help with the implementation.
