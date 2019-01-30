@@ -42,7 +42,7 @@ Two subcommands are implemented. See [recently_played_playlists/cli/main.py](htt
 In the puppeted installation, `save-played-tracks` is run as a cron, and `api` is run as a systemd service.
 
 ## Important note
-Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have played. That is why this repo polls the endpoint and saves the data. Sadly, you won't be able to make interesting playlists immediately after you install this application -- it will take some time to have enough data.
+Spotify does not distribute your entire listening history. At any one point in time, Spotify will tell you the last 50 tracks that you have played. That is why the puppeted installation polls the endpoint via cron. Sadly, you won't be able to make interesting playlists immediately after you install this application -- it will take some time to have enough data.
 
 ## Where is the magic?
 I'm so glad you asked! It's in [recently_played_playlists/db/db.py](https://github.com/ndelnano/recently-played-playlists/blob/master/recently_played_playlists/db/db.py):
@@ -97,7 +97,7 @@ I'd love to hear! See the README in the [recently-played-playlists-parser](https
 # Why don't you run this as a service?
 Listening history data becomes interesting when there's lots of it (or when its far in the past), and lots of data (or storing it for decades) means higher cloud computing costs. 
 
-My $5/mo DigitalOcean droplet supports me and 4 friends, but it wouldn't support 100 or 1000 people.
+My $5/mo cloud instance supports me and 4 friends, but it wouldn't support 100 or 1000 people.
 
 # What about Apple Music or Soundcloud?
 - Apple requires you to be a member of their developer program to hit their recently played API endpoint, which costs $$ :/
