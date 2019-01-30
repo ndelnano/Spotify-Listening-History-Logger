@@ -40,6 +40,8 @@ def make_playlist():
     playlist_name = request.args.get('playlist_name')
     description = request.args.get('description')
     print('Num tracks sent to /make_playlist')
+
+    # If there are no tracks, track_ids has length 1 and an empty first element.
     if len(track_ids) == 1 and track_ids[0] == '':
         return 'No tracks identified to fit this playlist, returning w/o a playlist\n'
 

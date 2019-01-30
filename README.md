@@ -11,6 +11,8 @@ This repo holds various functionalities for supporting the [recently-played-play
 
 You should not care to interact with the API yourself -- you should use the recently-played-playlists-parser.
 
+API endpoint parameters are documented in recently_played_playlists/api/api.py.
+
 # Installing and running
 See [recently-played-playlists-puppet](https://github.com/ndelnano/recently-played-playlists-puppet) for a puppet module and detailed instructions.
 
