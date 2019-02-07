@@ -104,3 +104,6 @@ My $5/mo cloud instance supports me and 4 friends, but it wouldn't support 100 o
 # What about Apple Music or Soundcloud?
 - Apple requires you to be a member of their developer program to hit their recently played API endpoint, which costs $$ :/
 - Soundcloud doesn't have a similar endpoint
+
+## TODOs
+I track all the recently-played-playlists[-parser|-puppet] projects on one [trello board](https://trello.com/b/J5GirlnV/playlist-maker).
