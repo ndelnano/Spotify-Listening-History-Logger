@@ -6,7 +6,7 @@ setup(
     description='Poll Spotify listening history and log to MySQL, & HTTP API for recently-played-playlists-parser.',
     author="@ndelnano",
     author_email="nickdelnano@gmail.com",
-    url='github.com/ndelnano/recently-played-playlists',
+    url='https://github.com/ndelnano/recently-played-playlists',
     install_requires=[
         'flask',
         'mysqlclient',
