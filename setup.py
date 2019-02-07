@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='recently-played-playlists',
-    version='1.0.0',
+    version='1.0.1',
     description='Poll Spotify listening history and log to MySQL, & HTTP API for recently-played-playlists-parser.',
     author="@ndelnano",
     author_email="nickdelnano@gmail.com",

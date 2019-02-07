@@ -54,6 +54,16 @@ def save_track_if_not_exists(track):
     '''
     track - dict, keys: name, uri, id, duration_ms
     '''
+    con = conn()
+    cur = MySQLdb.cursors.DictCursor(con)
+
+    # Does track exist?
+    query = f"select * from tracks where spotify_uri='{track['uri']}'"
+    cur.execute(query)
+    result = cur.fetchone()
+    if result:
+        return
+
     query = f'''
         INSERT IGNORE INTO tracks 
             (name, spotify_uri, spotify_id, duration_ms)
@@ -62,8 +72,6 @@ def save_track_if_not_exists(track):
     '''
 
     values = (track['name'], track['uri'], track['id'], track['duration_ms'])
-    con = conn()
-    cur = MySQLdb.cursors.DictCursor(con)
     cur.execute(query, values)
     con.commit()
     con.close()
