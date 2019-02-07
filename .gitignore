@@ -4,3 +4,4 @@ tags
 *.py[co]
 .tox
 *.egg-info/
+dist/
